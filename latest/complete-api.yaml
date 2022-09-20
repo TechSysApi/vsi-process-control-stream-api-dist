@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 7.4.0
+  version: 7.5.0-feat-noLocationT.2
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -520,17 +520,6 @@ definitions:
         $ref: 'LegalForTradeState'
     additionalProperties: false
     description: 'Customs information'
-  Location:
-    type: object
-    properties:
-      face:
-        $ref: 'MailpieceFace'
-        description: "# GER-TODO\nZur Erkennung auf welcher Seite (welche Kamera) der Identcode gelesen wurde (z.B. für VCS…).\nDer Wert ist nur auf den Identcode (national) bezogen."
-      polygon:
-        $ref: 'Polygon'
-        description: "Achtung: Die Punkte in Förderrichtung durchnummeriert, im Unterschied zum CEN-Standard, wo sie im (Gegen-)Uhrzeigersinn ausgerichtet sind.\nDie Punkte werden wie folgt ermittelt/ausgegeben:\nerster Punkt in Förde-richtung ist der Start-punkt gezählt wird fortlaufend in Förderichtung (nicht Uhrzeigersinn)\nalle Angaben sind bezogen auf den Triggernullpunkt (= Schalenanfang) ‚x’ wird in Förderrichtung ermittelt; ‚y’ quer zur Förderrichtung"
-    additionalProperties: false
-    description: "To specify a region location, the region descriptor LocationT listed subsequently is used. LocationT encloses\nno information about the image orientation. The image orientation is specified in the TIFF header. Region\ncoordinates are given in pixel and are related to the image origin which corresponds to the upper left corner.\nThe coordinates are independent of the TIFF orientation."
   MailpieceAttributes:
     type: object
     properties:
@@ -544,19 +533,6 @@ definitions:
       - type
     additionalProperties: false
     description: "This type is taken from CEN/TS 15448 and extended by a “preknowledge” element.\nThe type MailpieceAttrT specifies basic mailpiece attributes."
-  MailpieceFace:
-    type: string
-    enum:
-      - TOP
-      - LEFT
-      - RIGHT
-      - FRONT
-      - REAR
-      - BOTTOM
-      - FRONT_LEFT
-      - FRONT_RIGHT
-      - REAR_LEFT
-      - REAR_RIGHT
   MailpieceType:
     type: string
     enum:
@@ -785,27 +761,6 @@ definitions:
       - type
       - description
     additionalProperties: false
-  PolygonDot:
-    type: object
-    properties:
-      x:
-        type: number
-      y:
-        type: number
-    required:
-      - x
-      - y
-    additionalProperties: false
-  Polygon:
-    type: object
-    properties:
-      dot:
-        type: array
-        items:
-          $ref: 'PolygonDot'
-    required:
-      - dot
-    additionalProperties: false
   ReadRate:
     type: object
     properties:
@@ -854,8 +809,6 @@ definitions:
         items:
           $ref: 'InformationCarrier'
         description: "Contains the data from the information carrier identified by the reading system.\nThe reading system should read and send all available barcodes/matrix codes. The consuming systems will apply further classification and filtering."
-      location:
-        $ref: 'Location'
       dimension:
         $ref: 'Dimension'
         description: 'dimension of the mail piece.'
@@ -1083,7 +1036,7 @@ definitions:
         description: 'Only used when the sorting machine decided to sort the mail piece based on the sort reason.'
       mailpieceAttributes:
         $ref: 'MailpieceAttributes'
-        description: "Provides basic mailpiece related information:\n\n- the kind of the mail item\n- the mailclass of the mail item; important for the ED because it and may affect the address recognition\n- the scanned faces of the mail item. The FaceSetT type is assigned to faces and allows providing a sequence of faces.\n   The FaceSetT types allows to link a face with the corresponding image by a page attribute.\n- a preknowledge result if a barcode reader or some other type of Enrichment Device is directly attached to the MC.\n   This result will be in accordance with the result type specified in the IC-ED interface."
+        description: "Provides basic mailpiece related information:\n\n- the kind of the mail item\n- a preknowledge result if a barcode reader or some other type of Enrichment Device is directly attached to the MC.\n   This result will be in accordance with the result type specified in the IC-ED interface."
     required:
       - timestamp
       - locationKey
