@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 7.5.0-feat-stateModel.1
+  version: 7.5.0-feat-stateModel.2
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -162,30 +162,6 @@ paths:
       responses:
         default:
           schema: {$ref: 'Messages'}
-  '/{locationKey}/vsi-process-control/v7/device/fill-levels/{srcSystem}/{srcInstance}':
-    post:
-      summary: 'ATG-9 update live data'
-      description: 'Used to send live data (fill level) from the device to the control. (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
-      tags:
-        - device
-      parameters:
-        -
-          $ref: 'undefined'
-      responses:
-        default:
-          schema: {$ref: 'FillLevels'}
-  '/{locationKey}/vsi-process-control/v7/device/read-rates/{srcSystem}/{srcInstance}':
-    post:
-      summary: 'ATG-9 update live data'
-      description: 'Used to send live data (read rate) from the device to the control. The frequency of the data event is configurable (default 1 minute). (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
-      tags:
-        - device
-      parameters:
-        -
-          $ref: 'undefined'
-      responses:
-        default:
-          schema: {$ref: 'ReadRates'}
   '/{locationKey}/vsi-process-control/v7/device/track-event/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-10 update track event'
@@ -261,7 +237,7 @@ paths:
   '/{locationKey}/vsi-process-control/v7/control/synchronize/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-15 Device Synchronisieren'
-      description: 'Requests a Device to synchronize with control'
+      description: 'Requests a device to synchronize with control'
       tags:
         - control
       parameters:
@@ -375,62 +351,6 @@ definitions:
         $ref: 'DimensionMeasurementState'
     additionalProperties: false
     description: 'Dimension measurement of the mail piece'
-  FillLevel:
-    type: object
-    properties:
-      processPoint:
-        type: string
-        description: 'The location where the information was generated. (Siehe Anlagen Bezeichnungskonzept)'
-      total:
-        type: integer
-        description: 'Number of parcels actually at the processpoint (Sorter / Conveyor).'
-        minimum: 0
-      capacity:
-        type: integer
-        description: 'Maximum number of parcels the processpoint (Sorter / Conveyor) can buffer. xy'
-        minimum: 0
-      noDestination:
-        type: integer
-        description: 'Number of parcels with no destination.'
-        minimum: 0
-      destinationMCS:
-        type: integer
-        description: 'Number of parcels with destination MCS.'
-        minimum: 0
-      destinationReject:
-        type: integer
-        description: 'Number of parcels with destination reject.'
-        minimum: 0
-    required:
-      - processPoint
-      - total
-      - capacity
-      - noDestination
-      - destinationMCS
-      - destinationReject
-    additionalProperties: false
-    description: 'The actual fill level of the parcel sorter. The fill level will be used for visualization and control purposes.'
-  FillLevels:
-    type: object
-    properties:
-      timestamp:
-        type: string
-        description: 'The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.'
-        format: date-time
-      locationKey:
-        type: string
-        description: 'Unique identifier of the sorting center.'
-        maxLength: 200
-      fillLevels:
-        type: array
-        items:
-          $ref: 'FillLevel'
-    required:
-      - timestamp
-      - locationKey
-      - fillLevels
-    additionalProperties: false
-    description: 'Contains an array of fill levels.'
   HardwareRebootRequest:
     type: object
     properties:
@@ -761,46 +681,6 @@ definitions:
       - type
       - description
     additionalProperties: false
-  ReadRate:
-    type: object
-    properties:
-      processPoint:
-        type: string
-        description: 'The location where the information was generated. (Siehe Anlagen Bezeichnungskonzept)'
-      total:
-        type: integer
-        description: 'Total number of malipieces that passed the reading device.'
-        minimum: 0
-      read:
-        type: integer
-        description: "Number of mailpieces successfully read at processpoint excluding the following:\n- Read status is faulty, e.g. shading, barcode not recognisable\n- SortReason.SCANNER_TIMEOUT"
-        minimum: 0
-    required:
-      - processPoint
-      - total
-      - read
-    additionalProperties: false
-    description: 'The read rate event of an element. The counter will be used for visualization and statistic purposes.'
-  ReadRates:
-    type: object
-    properties:
-      timestamp:
-        type: string
-        description: 'The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.'
-        format: date-time
-      locationKey:
-        type: string
-        description: 'Unique identifier of the sorting center.'
-        maxLength: 200
-      readRates:
-        type: array
-        items:
-          $ref: 'ReadRate'
-    required:
-      - timestamp
-      - locationKey
-    additionalProperties: false
-    description: 'Contains an array of read rates.'
   RecognitionResult:
     type: object
     properties:
