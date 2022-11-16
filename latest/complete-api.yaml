@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 7.5.0-feat-stateModel.2
+  version: 7.5.0-feat-stateModel.4
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -341,12 +341,15 @@ definitions:
       length:
         type: integer
         description: 'Length in [mm].'
+        minimum: 0
       width:
         type: integer
         description: 'Width in [mm].'
+        minimum: 0
       height:
         type: integer
         description: 'Height in [mm].'
+        minimum: 0
       state:
         $ref: 'DimensionMeasurementState'
     additionalProperties: false
@@ -366,6 +369,17 @@ definitions:
       - timestamp
       - locationKey
     additionalProperties: false
+  Implementors:
+    type: string
+    enum:
+      - BEUMER
+      - LIPPERT
+      - FIVES
+      - KOERBER
+      - SICK
+      - FLUECK
+      - PRIMEVISION
+    description: "List of implementors of this API.\nList of values:\n- BEUMER: cross belt sorter\n- LIPPERT: ROTA sorter\n- FIVES: GENI-Ant sorter\n- KOERBER: mix mail parcel integration\n- SICK: 3D scanner for bulk\n- FLUECK: roll cage conveyor\n- PRIMEVISION: presorting module"
   InformationCarrier:
     type: object
     properties:
@@ -425,14 +439,18 @@ definitions:
       actualVolume:
         type: integer
         description: "# GER-TODO\n\nRealvolumen VMS#1 wenn VMS#1 = VMS420/520 Realvolumen = 000000 bei VMS#1 = VMS410/510\n[dm3]"
-        maxLength: 5
+        minimum: 0
+        maximum: 99999
       boxVolume:
         type: integer
         description: "Boxvolumen = Länge x Breite x Höhe\n[dm3]"
-        maxLength: 5
+        minimum: 0
+        maximum: 99999
       volumeRatio:
         type: integer
         description: 'Realvolumen / Boxvolumen in % ganzzahlig'
+        minimum: 0
+        maximum: 100
       shape:
         $ref: 'ShapeType'
         description: 'Die Paketform.'
@@ -540,8 +558,7 @@ definitions:
         type: string
       value:
         type: integer
-        description: "Module state\nTechsys:\n  - publish statuschange: RDY=0,DSA=1,ERR=2\n  - set status: ENA=10,DISA=11"
-        minimum: 0
+        description: 'Module state'
     required:
       - name
       - value
@@ -557,22 +574,24 @@ definitions:
         type: string
         description: 'Unique identifier of the sorting center.'
         maxLength: 200
+      model:
+        $ref: 'Implementors'
+        description: "Identifies the model (values and semantics) of device and module states in this message.\nEach implementor publishes values according to their proprietary model."
       machineState:
         type: integer
-        description: "This is the single attribute which has a predefined name.\nIt represents the overall state of the machine represented by the Sorter instance.\nIf the Sorter is not able to calculate the overall state this value is not to be sent."
-        minimum: 0
+        description: "This is the single attribute which has a predefined name.\nIt represents the overall state of the device represented by the device instance.\nIf the device is not able to calculate the overall state this value is not to be sent."
       moduleStates:
         type: array
         items:
           $ref: 'ModuleState'
-        description: "The set of attributes transmitting substates of a Sorter. This elements stands for a specific visualisation element / state variable.\nThere exists as many instances of this attribute in the group as necessary to express all state information of the Sorter role."
+        description: "The set of attributes transmitting substates of a device. This elements stands for a specific visualisation element / state variable.\nThere exists as many instances of this attribute in the group as necessary to express all state information of the device role."
+        minItems: 1
     required:
       - timestamp
       - locationKey
-      - machineState
-      - moduleStates
+      - model
     additionalProperties: false
-    description: 'Contains an overall machine state and a list of (sub) moduleStates.'
+    description: 'Contains an overall device state and a list of (sub) moduleStates.'
   ParameterMetadata:
     type: object
     properties:
@@ -792,6 +811,9 @@ definitions:
         type: string
         description: 'Unique identifier of the sorting center.'
         maxLength: 200
+      model:
+        $ref: 'Implementors'
+        description: "Identifies the model (values and semantics) of statistics in this message.\nEach implementor publishes values according to their proprietary model."
       stats:
         type: array
         items:
@@ -799,6 +821,8 @@ definitions:
     required:
       - timestamp
       - locationKey
+      - model
+      - stats
     additionalProperties: false
     description: 'Used to send statistics data from the device to the control.'
   Stats:
@@ -968,7 +992,8 @@ definitions:
       value:
         type: integer
         description: 'Actual weight in [g].'
-        maxLength: 6
+        minimum: 0
+        maximum: 999999
       scaleId:
         type: string
         description: 'The id of the scale (e.g. HAE-024)'
