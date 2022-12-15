@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 7.5.0-feat-stateModel.6
+  version: 7.6.0-feat-stateModel.11
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -54,7 +54,7 @@ parameters:
       type: string
       default: '01'
 paths:
-  '/{locationKey}/vsi-process-control/v7/client/status/{srcSystem}/{srcInstance}':
+  '/{sortingUnitKey}/vsi-process-control/v7/client/status/{srcSystem}/{srcInstance}':
     post:
       summary: '🔂[RETAINED] client connection state'
       description: 'Used to notify subscribers about client connection state changes'
@@ -66,7 +66,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'ClientStatus'}
-  '/{locationKey}/vsi-process-control/v7/device/state/{srcSystem}/{srcInstance}':
+  '/{sortingUnitKey}/vsi-process-control/v7/device/state/{srcSystem}/{srcInstance}':
     post:
       summary: '🔂[RETAINED OPTIONAL] ATG-6 update machine state'
       description: 'Used to send state responses / updates from the device to the control. (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
@@ -78,7 +78,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'OverallState'}
-  '/{locationKey}/vsi-process-control/v7/control/state:set/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '/{sortingUnitKey}/vsi-process-control/v7/control/state:set/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-6 Change machine state'
       description: 'Issue a set request to the device to change its state (or a sub module state).'
@@ -90,7 +90,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'OverallState'}
-  '/{locationKey}/vsi-process-control/v7/device/state:set:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '/{sortingUnitKey}/vsi-process-control/v7/device/state:set:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-6 Change machine state'
       description: 'Issues the state update status (successful or unsuccesful) of a state:set operation'
@@ -102,7 +102,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
-  '/{locationKey}/vsi-process-control/v7/device/parameter-metadata/{srcSystem}/{srcInstance}':
+  '/{sortingUnitKey}/vsi-process-control/v7/device/parameter-metadata/{srcSystem}/{srcInstance}':
     post:
       summary: '🔂[RETAINED] ATG-7 update parameter list'
       description: 'Used to send a list of available parameters. The device publishes its parameter metadata at startup and whenever there is a change. (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
@@ -114,7 +114,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'ParameterMetadata'}
-  '/{locationKey}/vsi-process-control/v7/device/parameter-values/{srcSystem}/{srcInstance}':
+  '/{sortingUnitKey}/vsi-process-control/v7/device/parameter-values/{srcSystem}/{srcInstance}':
     post:
       summary: '🔂[RETAINED OPTIONAL] ATG-7 update parameter values'
       description: 'Used to send a list of changed parameters from the device to the control. The device publishes its parameter values at startup and whenever there is a change. (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
@@ -126,7 +126,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'ParameterValues'}
-  '/{locationKey}/vsi-process-control/v7/control/parameter-values:set/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '/{sortingUnitKey}/vsi-process-control/v7/control/parameter-values:set/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-7 change parameter values'
       description: 'Issue a set request to the device to change its parameter value(s).'
@@ -138,7 +138,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'ParameterValues'}
-  '/{locationKey}/vsi-process-control/v7/device/parameter-values:set:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '/{sortingUnitKey}/vsi-process-control/v7/device/parameter-values:set:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-7 change parameter values status'
       description: 'Issues the parameter values update status (successful or unsuccesful) of a parameter-values:set operation'
@@ -150,7 +150,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
-  '/{locationKey}/vsi-process-control/v7/device/messages/{srcSystem}/{srcInstance}':
+  '/{sortingUnitKey}/vsi-process-control/v7/device/messages/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-8 update messages'
       description: 'Used to send messages (alarms) from the device to the control. (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
@@ -162,7 +162,31 @@ paths:
       responses:
         default:
           schema: {$ref: 'Messages'}
-  '/{locationKey}/vsi-process-control/v7/device/track-event/{srcSystem}/{srcInstance}':
+  '/{sortingUnitKey}/vsi-process-control/v7/device/fill-levels/{srcSystem}/{srcInstance}':
+    post:
+      summary: 'ATG-9 update live data'
+      description: 'Used to send live data (fill level) from the device to the control. (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
+      tags:
+        - device
+      parameters:
+        -
+          $ref: 'undefined'
+      responses:
+        default:
+          schema: {$ref: 'FillLevels'}
+  '/{sortingUnitKey}/vsi-process-control/v7/device/read-rates/{srcSystem}/{srcInstance}':
+    post:
+      summary: 'ATG-9 update live data'
+      description: 'Used to send live data (read rate) from the device to the control. The frequency of the data event is configurable (default 1 minute). (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
+      tags:
+        - device
+      parameters:
+        -
+          $ref: 'undefined'
+      responses:
+        default:
+          schema: {$ref: 'ReadRates'}
+  '/{sortingUnitKey}/vsi-process-control/v7/device/track-event/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-10 update track event'
       description: "Used to send track event from the device to the control.\n(Re-)Connected to ATG - The publisher needs to buffer all unsent messages for at least 1 day until the message is sent successfully to the ATG.\n"
@@ -174,7 +198,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'TrackEvent'}
-  '/{locationKey}/vsi-process-control/v7/device/statistics/{srcSystem}/{srcInstance}':
+  '/{sortingUnitKey}/vsi-process-control/v7/device/statistics/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-11 update statistics'
       description: 'Used to send statistics from the device to the control. The frequency of the data event is configurable (default 5 minutes). (Re-)Connected to ATG - The publisher needs to buffer all unsent messages for at least 1 day until the message is sent successfully to the ATG.'
@@ -186,7 +210,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'Statistics'}
-  '/{locationKey}/vsi-process-control/v7/control/software:restart/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '/{sortingUnitKey}/vsi-process-control/v7/control/software:restart/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-13 Device-Software neustarten'
       description: 'Used to restart the device from the control'
@@ -198,7 +222,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'SoftwareRestartRequest'}
-  '/{locationKey}/vsi-process-control/v7/device/software:restart:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '/{sortingUnitKey}/vsi-process-control/v7/device/software:restart:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-13 Device-Software neustarten'
       description: 'Issues the restart status (successful or unsuccesful) of a restart operation.'
@@ -210,7 +234,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
-  '/{locationKey}/vsi-process-control/v7/control/hardware:reboot/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '/{sortingUnitKey}/vsi-process-control/v7/control/hardware:reboot/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-14 Device-Hardware neustarten (boot)'
       description: 'Used to reboot the device''s host from the control'
@@ -222,7 +246,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'HardwareRebootRequest'}
-  '/{locationKey}/vsi-process-control/v7/device/hardware:reboot:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '/{sortingUnitKey}/vsi-process-control/v7/device/hardware:reboot:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-14 Device-Hardware neustarten (boot)'
       description: 'Issues the reboot status (successful or unsuccesful) of a reboot operation.'
@@ -234,10 +258,10 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
-  '/{locationKey}/vsi-process-control/v7/control/synchronize/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '/{sortingUnitKey}/vsi-process-control/v7/control/synchronize/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-15 Device Synchronisieren'
-      description: 'Requests a device to synchronize with control'
+      description: 'Requests a Device to synchronize with control'
       tags:
         - control
       parameters:
@@ -246,7 +270,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'SynchronizeRequest'}
-  '/{locationKey}/vsi-process-control/v7/device/synchronize:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '/{sortingUnitKey}/vsi-process-control/v7/device/synchronize:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-15 Device Synchronisieren'
       description: 'Issues the synchronize status (successful or unsuccesful) of a synchronize operation.'
@@ -298,14 +322,14 @@ definitions:
         type: string
         description: 'The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.'
         format: date-time
-      locationKey:
+      sortingUnitKey:
         type: string
-        description: 'Unique identifier of the sorting center.'
+        description: 'Unique identifier of the sorting unit at a specific location.'
         maxLength: 200
     required:
       - state
       - timestamp
-      - locationKey
+      - sortingUnitKey
     additionalProperties: false
   DimensionMeasurementRangeType:
     type: string
@@ -354,6 +378,56 @@ definitions:
         $ref: 'DimensionMeasurementState'
     additionalProperties: false
     description: 'Dimension measurement of the mail piece'
+  FillLevel:
+    type: object
+    properties:
+      processPoint:
+        type: string
+        description: 'The location where the information was generated. (Siehe Anlagen Bezeichnungskonzept)'
+      totalItems:
+        type: integer
+        description: 'Number of items actually at the processpoint (sorter / conveyor).'
+        minimum: 0
+      totalTrays:
+        type: integer
+        description: 'Number of trays occoupied at the processpoint (Sorter / Conveyor).'
+        minimum: 0
+      capacity:
+        type: integer
+        description: 'Maximum number of items the processpoint (sorter / conveyor) can buffer (e.g. number of active trays for a tray sorter).'
+        minimum: 0
+      noDestination:
+        type: integer
+        description: 'Number of items at the process point with no destination assigned.'
+        minimum: 0
+    required:
+      - processPoint
+      - totalItems
+      - capacity
+      - noDestination
+    additionalProperties: false
+    description: 'The actual fill level of a sorter / conveyor. The fill level will be used for visualization and control purposes.'
+  FillLevels:
+    type: object
+    properties:
+      timestamp:
+        type: string
+        description: 'The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.'
+        format: date-time
+      sortingUnitKey:
+        type: string
+        description: 'Unique identifier of the sorting unit at a specific location.'
+        maxLength: 200
+      fillLevels:
+        type: array
+        items:
+          $ref: 'FillLevel'
+    required:
+      - timestamp
+      - sortingUnitKey
+      - fillLevels
+    additionalProperties: false
+    description: 'Contains an array of fill levels.'
   HardwareRebootRequest:
     type: object
     properties:
@@ -361,13 +435,13 @@ definitions:
         type: string
         description: 'The date+timestamp which identifies the point in time, where the reboot request was generated, including milliseconds.'
         format: date-time
-      locationKey:
+      sortingUnitKey:
         type: string
-        description: 'Unique identifier of the sorting center.'
+        description: 'Unique identifier of the sorting unit at a specific location.'
         maxLength: 200
     required:
       - timestamp
-      - locationKey
+      - sortingUnitKey
     additionalProperties: false
   Implementors:
     type: string
@@ -537,9 +611,9 @@ definitions:
         type: string
         description: 'The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.'
         format: date-time
-      locationKey:
+      sortingUnitKey:
         type: string
-        description: 'Unique identifier of the sorting center.'
+        description: 'Unique identifier of the sorting unit at a specific location.'
         maxLength: 200
       messages:
         type: array
@@ -547,7 +621,7 @@ definitions:
           $ref: 'Message'
     required:
       - timestamp
-      - locationKey
+      - sortingUnitKey
       - messages
     additionalProperties: false
     description: 'Used to send message (alarms) from the device to the control.'
@@ -570,25 +644,25 @@ definitions:
         type: string
         description: 'The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.'
         format: date-time
-      locationKey:
+      sortingUnitKey:
         type: string
-        description: 'Unique identifier of the sorting center.'
+        description: 'Unique identifier of the sorting unit at a specific location.'
         maxLength: 200
       model:
         $ref: 'Implementors'
         description: "Identifies the model (values and semantics) of device and module states in this message.\nEach implementor publishes values according to their proprietary model."
       machineState:
         type: integer
-        description: "This is the single attribute which has a predefined name.\nIt represents the overall state of the device represented by the device instance.\nIf the device is not able to calculate the overall state this value is not to be sent."
+        description: "This represents the overall state of the sorting device (e.g. sorting machine, presorting device, 3D bulk scanner, ..)\nIf the device is not able to calculate the overall state this value is not to be sent."
       moduleStates:
         type: array
         items:
           $ref: 'ModuleState'
-        description: "The set of attributes transmitting substates of a device. This elements stands for a specific visualisation element / state variable.\nThere exists as many instances of this attribute in the group as necessary to express all state information of the device role."
+        description: "The set of attributes transmitting substates of a device. Each element stands for a specific visualisation element / state variable.\nThere exists as many instances of this attribute in the group as necessary to express all state information of the device role."
         minItems: 1
     required:
       - timestamp
-      - locationKey
+      - sortingUnitKey
       - model
     additionalProperties: false
     description: 'Contains an overall device state and a list of (sub) moduleStates.'
@@ -599,9 +673,9 @@ definitions:
         type: string
         description: 'The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.'
         format: date-time
-      locationKey:
+      sortingUnitKey:
         type: string
-        description: 'Unique identifier of the sorting center.'
+        description: 'Unique identifier of the sorting unit at a specific location.'
         maxLength: 200
       parameters:
         type: array
@@ -611,7 +685,7 @@ definitions:
         minItems: 1
     required:
       - timestamp
-      - locationKey
+      - sortingUnitKey
       - parameters
     additionalProperties: false
     description: 'Contains exactly one main element, based on the use case (XOR).'
@@ -650,9 +724,9 @@ definitions:
         type: string
         description: 'The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.'
         format: date-time
-      locationKey:
+      sortingUnitKey:
         type: string
-        description: 'Unique identifier of the sorting center'
+        description: 'Unique identifier of the sorting unit at a specific location.'
         maxLength: 200
       parameterValues:
         type: array
@@ -662,7 +736,7 @@ definitions:
         minItems: 1
     required:
       - timestamp
-      - locationKey
+      - sortingUnitKey
       - parameterValues
     additionalProperties: false
     description: 'Contains exactly one main element, based on the use case (XOR).'
@@ -700,6 +774,46 @@ definitions:
       - type
       - description
     additionalProperties: false
+  ReadRate:
+    type: object
+    properties:
+      processPoint:
+        type: string
+        description: 'The location where the information was generated. (Siehe Anlagen Bezeichnungskonzept)'
+      total:
+        type: integer
+        description: 'Total number of malipieces that passed the reading device.'
+        minimum: 0
+      read:
+        type: integer
+        description: 'Number of mailpieces with at least one readable barcode / 2d-code at processpoint'
+        minimum: 0
+    required:
+      - processPoint
+      - total
+      - read
+    additionalProperties: false
+    description: 'The read rate event of an element. The counter will be used for visualization and statistic purposes.'
+  ReadRates:
+    type: object
+    properties:
+      timestamp:
+        type: string
+        description: 'The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.'
+        format: date-time
+      sortingUnitKey:
+        type: string
+        description: 'Unique identifier of the sorting unit at a specific location.'
+        maxLength: 200
+      readRates:
+        type: array
+        items:
+          $ref: 'ReadRate'
+    required:
+      - timestamp
+      - sortingUnitKey
+    additionalProperties: false
+    description: 'Contains an array of read rates.'
   RecognitionResult:
     type: object
     properties:
@@ -733,9 +847,9 @@ definitions:
         type: string
         description: 'The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.'
         format: date-time
-      locationKey:
+      sortingUnitKey:
         type: string
-        description: 'Unique identifier of the sorting center.'
+        description: 'Unique identifier of the sorting unit at a specific location.'
         maxLength: 200
       state:
         $ref: 'RequestState'
@@ -744,7 +858,7 @@ definitions:
         description: "May contain additional information on the status, e.g. error reason\nin case of ERROR. Messages are not meant to be processed\nautomatically but should just be used for problem\ntracking."
     required:
       - timestamp
-      - locationKey
+      - sortingUnitKey
       - state
     additionalProperties: false
     description: 'Response of the device to a Request.'
@@ -760,13 +874,13 @@ definitions:
         type: string
         description: 'The date+timestamp which identifies the point in time, where the restart request was generated, including milliseconds.'
         format: date-time
-      locationKey:
+      sortingUnitKey:
         type: string
-        description: 'Unique identifier of the sorting center.'
+        description: 'Unique identifier of the sorting unit at a specific location.'
         maxLength: 200
     required:
       - timestamp
-      - locationKey
+      - sortingUnitKey
     additionalProperties: false
   SortReason:
     type: string
@@ -807,9 +921,9 @@ definitions:
         type: string
         description: 'The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.'
         format: date-time
-      locationKey:
+      sortingUnitKey:
         type: string
-        description: 'Unique identifier of the sorting center.'
+        description: 'Unique identifier of the sorting unit at a specific location.'
         maxLength: 200
       model:
         $ref: 'Implementors'
@@ -820,7 +934,7 @@ definitions:
           $ref: 'Stats'
     required:
       - timestamp
-      - locationKey
+      - sortingUnitKey
       - model
       - stats
     additionalProperties: false
@@ -841,10 +955,16 @@ definitions:
         description: 'The location where the information was generated. (Siehe Anlagen Bezeichnungskonzept)'
       type:
         $ref: 'StatisticsType'
+      fields:
+        type: array
+        items:
+          type: string
+        description: 'The names of the values in this stats object'
       values:
         type: array
         items:
           type: string
+        description: 'The values / counters in this stats object during the specific timeslize'
     required:
       - timeSliceStart
       - timeSlice
@@ -881,13 +1001,13 @@ definitions:
         type: string
         description: 'The date+timestamp which identifies the point in time, when control requested the synchronization of the device.'
         format: date-time
-      locationKey:
+      sortingUnitKey:
         type: string
-        description: 'Unique identifier of the sorting center.'
+        description: 'Unique identifier of the sorting unit at a specific location.'
         maxLength: 200
     required:
       - timestamp
-      - locationKey
+      - sortingUnitKey
     additionalProperties: false
     description: "Requests the machine to synchronize with control. The machine must send the following information:\n- The status of the machine and its modules\n- All active alarm messages\n- All current parameter values\nInformation does not need to be published if the full state is published as RETAINED."
   TrackEventType:
@@ -911,9 +1031,9 @@ definitions:
         type: string
         description: 'The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.'
         format: date-time
-      locationKey:
+      sortingUnitKey:
         type: string
-        description: 'Unique identifier of the sorting center.'
+        description: 'Unique identifier of the sorting unit at a specific location.'
         maxLength: 200
       eventType:
         $ref: 'TrackEventType'
@@ -943,7 +1063,7 @@ definitions:
         description: "Provides basic mailpiece related information:\n\n- the kind of the mail item\n- a preknowledge result if a barcode reader or some other type of Enrichment Device is directly attached to the MC.\n   This result will be in accordance with the result type specified in the IC-ED interface."
     required:
       - timestamp
-      - locationKey
+      - sortingUnitKey
       - eventType
       - processPoint
       - sortingProcess
