@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 7.6.0-feature-stateModel.3
+  version: 7.6.0-feature-stateModel.4
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -524,7 +524,6 @@ definitions:
         type: integer
         description: 'Realvolumen / Boxvolumen in % ganzzahlig'
         minimum: 0
-        maximum: 100
       shape:
         $ref: 'ShapeType'
         description: 'Die Paketform.'
