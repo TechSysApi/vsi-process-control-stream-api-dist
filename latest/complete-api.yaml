@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 7.6.0
+  version: 7.6.1
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -54,7 +54,7 @@ parameters:
       type: string
       default: '01'
 paths:
-  '/{sortingUnitKey}/vsi-process-control/v7/client/status/{srcSystem}/{srcInstance}':
+  '{sortingUnitKey}/vsi-process-control/v7/client/status/{srcSystem}/{srcInstance}':
     post:
       summary: '🔂[RETAINED] client connection state'
       description: 'Used to notify subscribers about client connection state changes'
@@ -66,7 +66,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'ClientStatus'}
-  '/{sortingUnitKey}/vsi-process-control/v7/device/state/{srcSystem}/{srcInstance}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/state/{srcSystem}/{srcInstance}':
     post:
       summary: '🔂[RETAINED OPTIONAL] ATG-6 update machine state'
       description: 'Used to send state responses / updates from the device to the control. (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
@@ -78,7 +78,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'OverallState'}
-  '/{sortingUnitKey}/vsi-process-control/v7/control/state:set/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '{sortingUnitKey}/vsi-process-control/v7/control/state:set/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-6 Change machine state'
       description: 'Issue a set request to the device to change its state (or a sub module state).'
@@ -90,7 +90,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'OverallState'}
-  '/{sortingUnitKey}/vsi-process-control/v7/device/state:set:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/state:set:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-6 Change machine state'
       description: 'Issues the state update status (successful or unsuccesful) of a state:set operation'
@@ -102,7 +102,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
-  '/{sortingUnitKey}/vsi-process-control/v7/device/parameter-metadata/{srcSystem}/{srcInstance}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/parameter-metadata/{srcSystem}/{srcInstance}':
     post:
       summary: '🔂[RETAINED] ATG-7 update parameter list'
       description: 'Used to send a list of available parameters. The device publishes its parameter metadata at startup and whenever there is a change. (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
@@ -114,7 +114,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'ParameterMetadata'}
-  '/{sortingUnitKey}/vsi-process-control/v7/device/parameter-values/{srcSystem}/{srcInstance}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/parameter-values/{srcSystem}/{srcInstance}':
     post:
       summary: '🔂[RETAINED OPTIONAL] ATG-7 update parameter values'
       description: 'Used to send a list of changed parameters from the device to the control. The device publishes its parameter values at startup and whenever there is a change. (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
@@ -126,7 +126,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'ParameterValues'}
-  '/{sortingUnitKey}/vsi-process-control/v7/control/parameter-values:set/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '{sortingUnitKey}/vsi-process-control/v7/control/parameter-values:set/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-7 change parameter values'
       description: 'Issue a set request to the device to change its parameter value(s).'
@@ -138,7 +138,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'ParameterValues'}
-  '/{sortingUnitKey}/vsi-process-control/v7/device/parameter-values:set:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/parameter-values:set:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-7 change parameter values status'
       description: 'Issues the parameter values update status (successful or unsuccesful) of a parameter-values:set operation'
@@ -150,7 +150,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
-  '/{sortingUnitKey}/vsi-process-control/v7/device/messages/{srcSystem}/{srcInstance}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/messages/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-8 update messages'
       description: 'Used to send messages (alarms) from the device to the control. (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
@@ -162,7 +162,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'Messages'}
-  '/{sortingUnitKey}/vsi-process-control/v7/device/fill-levels/{srcSystem}/{srcInstance}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/fill-levels/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-9 update live data'
       description: 'Used to send live data (fill level) from the device to the control. (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
@@ -174,7 +174,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'FillLevels'}
-  '/{sortingUnitKey}/vsi-process-control/v7/device/read-rates/{srcSystem}/{srcInstance}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/read-rates/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-9 update live data'
       description: 'Used to send live data (read rate) from the device to the control. The frequency of the data event is configurable (default 1 minute). (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
@@ -186,7 +186,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'ReadRates'}
-  '/{sortingUnitKey}/vsi-process-control/v7/device/track-event/{srcSystem}/{srcInstance}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/track-event/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-10 update track event'
       description: "Used to send track event from the device to the control.\n(Re-)Connected to ATG - The publisher needs to buffer all unsent messages for at least 1 day until the message is sent successfully to the ATG.\n"
@@ -198,7 +198,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'TrackEvent'}
-  '/{sortingUnitKey}/vsi-process-control/v7/device/statistics/{srcSystem}/{srcInstance}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/statistics/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-11 update statistics'
       description: 'Used to send statistics from the device to the control. The frequency of the data event is configurable (default 5 minutes). (Re-)Connected to ATG - The publisher needs to buffer all unsent messages for at least 1 day until the message is sent successfully to the ATG.'
@@ -210,7 +210,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'Statistics'}
-  '/{sortingUnitKey}/vsi-process-control/v7/control/software:restart/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '{sortingUnitKey}/vsi-process-control/v7/control/software:restart/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-13 Device-Software neustarten'
       description: 'Used to restart the device from the control'
@@ -222,7 +222,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'SoftwareRestartRequest'}
-  '/{sortingUnitKey}/vsi-process-control/v7/device/software:restart:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/software:restart:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-13 Device-Software neustarten'
       description: 'Issues the restart status (successful or unsuccesful) of a restart operation.'
@@ -234,7 +234,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
-  '/{sortingUnitKey}/vsi-process-control/v7/control/hardware:reboot/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '{sortingUnitKey}/vsi-process-control/v7/control/hardware:reboot/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-14 Device-Hardware neustarten (boot)'
       description: 'Used to reboot the device''s host from the control'
@@ -246,7 +246,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'HardwareRebootRequest'}
-  '/{sortingUnitKey}/vsi-process-control/v7/device/hardware:reboot:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/hardware:reboot:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-14 Device-Hardware neustarten (boot)'
       description: 'Issues the reboot status (successful or unsuccesful) of a reboot operation.'
@@ -258,7 +258,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
-  '/{sortingUnitKey}/vsi-process-control/v7/control/synchronize/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '{sortingUnitKey}/vsi-process-control/v7/control/synchronize/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-15 Device Synchronisieren'
       description: 'Requests a Device to synchronize with control'
@@ -270,7 +270,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'SynchronizeRequest'}
-  '/{sortingUnitKey}/vsi-process-control/v7/device/synchronize:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/synchronize:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-15 Device Synchronisieren'
       description: 'Issues the synchronize status (successful or unsuccesful) of a synchronize operation.'
