@@ -3,9 +3,9 @@ info:
   title: 'Vsi Process Control Stream API'
   description: 'Describes the protocol of the device to the control software'
   contact:
-    name: 'Swiss Post Sorting System Development'
-    email: sortdev@post.ch
-  version: 7.6.1
+    name: 'Sorting Software Solutions'
+    email: sort.software.solutions@post.ch
+  version: 7.7.0-topic-vsiAdjustments.2
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -13,25 +13,25 @@ parameters:
     -
       name: srcSystem
       in: path
-      description: '3-letter uppercase name identifying the system issuing the message'
+      description: 'Uppercase name identifying the system issuing the message. We recommend three to six chars'
       type: string
       default: MDS
     -
       name: srcInstance
       in: path
-      description: 'two-digit padded number identifying the system instance issuing the message'
+      description: 'Identifier of the system instance receiving the message. We recommend a two-digit padded number'
       type: string
       default: '01'
     -
       name: dstSystem
       in: path
-      description: '3-letter uppercase name identifying the system receiving the message'
+      description: 'Uppercase name identifying the system receiving the message. We recommend three to six chars'
       type: string
       default: ASL
     -
       name: dstInstance
       in: path
-      description: 'two-digit padded number identifying the system instance receiving the message'
+      description: 'Identifier of the system instance receiving the message. We recommend a two-digit padded number'
       type: string
       default: '01'
     -
@@ -44,13 +44,32 @@ parameters:
     -
       name: srcSystem
       in: path
-      description: '3-letter uppercase name identifying the system issuing the message'
+      description: 'Uppercase name identifying the system issuing the message'
       type: string
       default: ASL
     -
       name: srcInstance
       in: path
-      description: 'two-digit padded number identifying the system instance issuing the message'
+      description: 'Identifier of the system instance issuing the message. We recommend a two-digit padded number'
+      type: string
+      default: '01'
+  sourceSystemInstanceWithComponentsParameters:
+    -
+      name: srcSystem
+      in: path
+      description: 'Uppercase name identifying the system issuing the message'
+      type: string
+      default: ASL
+    -
+      name: srcInstance
+      in: path
+      description: 'Identifier of the system instance issuing the message. We recommend a two-digit padded number'
+      type: string
+      default: '01'
+    -
+      name: component1..n
+      in: path
+      description: 'Identifier of the component of the system instance issuing the message. Might be used to represent a hierarchical structure.'
       type: string
       default: '01'
 paths:
@@ -66,10 +85,10 @@ paths:
       responses:
         default:
           schema: {$ref: 'ClientStatus'}
-  '{sortingUnitKey}/vsi-process-control/v7/device/state/{srcSystem}/{srcInstance}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/state/{srcSystem}/{srcInstance}/{component1..n}':
     post:
       summary: '🔂[RETAINED OPTIONAL] ATG-6 update machine state'
-      description: 'Used to send state responses / updates from the device to the control. (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
+      description: "Used to send state responses / updates from the device to the control. \nTo send a state, two approaches exist. Either a message per source system instance is send or a message for each component is sent.\nEach message must contain any state of all sub-components.\n(Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG respectively ensure that all state changes are resent.\n"
       tags:
         - device
       parameters:
@@ -93,7 +112,7 @@ paths:
   '{sortingUnitKey}/vsi-process-control/v7/device/state:set:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-6 Change machine state'
-      description: 'Issues the state update status (successful or unsuccesful) of a state:set operation'
+      description: 'Issues the state update status (successful or unsuccessful) of a state:set operation'
       tags:
         - device
       parameters:
@@ -141,7 +160,7 @@ paths:
   '{sortingUnitKey}/vsi-process-control/v7/device/parameter-values:set:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-7 change parameter values status'
-      description: 'Issues the parameter values update status (successful or unsuccesful) of a parameter-values:set operation'
+      description: 'Issues the parameter values update status (successful or unsuccessful) of a parameter-values:set operation'
       tags:
         - device
       parameters:
@@ -150,10 +169,10 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
-  '{sortingUnitKey}/vsi-process-control/v7/device/messages/{srcSystem}/{srcInstance}':
+  '{sortingUnitKey}/vsi-process-control/v7/device/messages/{srcSystem}/{srcInstance}/{component1..n}':
     post:
       summary: 'ATG-8 update messages'
-      description: 'Used to send messages (alarms) from the device to the control. (Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG.'
+      description: "Used to send messages (alarms) from the device to the control.\nMessages may be sent aggregated on the level of the system instance or on a sub topic per component.\nIt is also possible to batch multiple messages into one MQTT-Message but we recommend to send it one by one.\n(Re-)Connected to ATG - The publisher needs to send (synchronize) the full state to the ATG respectively ensure that all message buffered during disconnect are sent.\n"
       tags:
         - device
       parameters:
@@ -225,7 +244,7 @@ paths:
   '{sortingUnitKey}/vsi-process-control/v7/device/software:restart:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-13 Device-Software neustarten'
-      description: 'Issues the restart status (successful or unsuccesful) of a restart operation.'
+      description: 'Issues the restart status (successful or unsuccessful) of a restart operation.'
       tags:
         - device
       parameters:
@@ -249,7 +268,7 @@ paths:
   '{sortingUnitKey}/vsi-process-control/v7/device/hardware:reboot:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-14 Device-Hardware neustarten (boot)'
-      description: 'Issues the reboot status (successful or unsuccesful) of a reboot operation.'
+      description: 'Issues the reboot status (successful or unsuccessful) of a reboot operation.'
       tags:
         - device
       parameters:
@@ -273,7 +292,7 @@ paths:
   '{sortingUnitKey}/vsi-process-control/v7/device/synchronize:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-15 Device Synchronisieren'
-      description: 'Issues the synchronize status (successful or unsuccesful) of a synchronize operation.'
+      description: 'Issues the synchronize status (successful or unsuccessful) of a synchronize operation.'
       tags:
         - device
       parameters:
@@ -594,6 +613,10 @@ definitions:
         items:
           type: string
         description: 'Parameters for the above mentioned text / text referenced by the id.'
+      timestamp:
+        type: string
+        description: "The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.\nIf not provided it is assumed that the timestamp on the root object represents the point in time of message creation."
+        format: date-time
     required:
       - id
       - initiator
@@ -632,6 +655,10 @@ definitions:
       value:
         type: integer
         description: 'Module state'
+      timestamp:
+        type: string
+        description: "The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.\nIf not provided it is assumed that the timestamp on the root object represents the point in time of state change."
+        format: date-time
     required:
       - name
       - value
