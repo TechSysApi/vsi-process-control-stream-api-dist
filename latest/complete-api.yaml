@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 7.7.0-feature-message-ack.1
+  version: 7.7.0-feature-message-ack.2
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -164,8 +164,8 @@ paths:
           schema: {$ref: 'Messages'}
   '{sortingUnitKey}/vsi-process-control/v7/control/message:acknowledge/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
-      summary: 'ATG-8 akcnowlege message'
-      description: 'Issue an acknowledge request to the device.'
+      summary: 'ATG-8 akcnowledge message'
+      description: 'Issue a message acknowledge request to the device.'
       tags:
         - control
       parameters:
@@ -176,7 +176,7 @@ paths:
           schema: {$ref: 'MessageAcknowledge'}
   '{sortingUnitKey}/vsi-process-control/v7/device/message:acknowledge:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
-      summary: 'ATG-8 akcnowlege messages status'
+      summary: 'ATG-8 akcnowledge messages status'
       description: 'Issues the status (successful or unsuccesful) of a message:acknowledge operation'
       tags:
         - device
@@ -593,10 +593,14 @@ definitions:
         type: string
         description: 'The unique identifier of the message occurrence to acknowledge.'
         maxLength: 200
+      initiator:
+        type: string
+        description: 'The string identifying the source of the message.'
     required:
       - timestamp
       - sortingUnitKey
       - occurrenceId
+      - initiator
     additionalProperties: false
     description: 'Message acknowledge request'
   MessagePriority:
