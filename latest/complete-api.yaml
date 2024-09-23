@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 7.6.1
+  version: 7.7.0
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -162,6 +162,30 @@ paths:
       responses:
         default:
           schema: {$ref: 'Messages'}
+  '{sortingUnitKey}/vsi-process-control/v7/control/message:acknowledge/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+    post:
+      summary: 'ATG-8 akcnowledge message'
+      description: 'Issue a message acknowledge request to the device.'
+      tags:
+        - control
+      parameters:
+        -
+          $ref: 'undefined'
+      responses:
+        default:
+          schema: {$ref: 'MessageAcknowledge'}
+  '{sortingUnitKey}/vsi-process-control/v7/device/message:acknowledge:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
+    post:
+      summary: 'ATG-8 akcnowledge messages status'
+      description: 'Issues the status (successful or unsuccesful) of a message:acknowledge operation'
+      tags:
+        - device
+      parameters:
+        -
+          $ref: 'undefined'
+      responses:
+        default:
+          schema: {$ref: 'RequestStatus'}
   '{sortingUnitKey}/vsi-process-control/v7/device/fill-levels/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-9 update live data'
@@ -554,6 +578,31 @@ definitions:
       - FLAT_BUNDLE
       - PARCEL
     description: "Defines the mailpiece type.\nUNKNOWN Unknown mailpiece type for the sorter\nLETTER Mail item (Brief)\nLETTER_BUNDLE Not supported\nFLAT Big letters mostly from China (Kleinware)\nFLAT_BUNDLE Bundle of mail items (Bund)\nPARCEL Parcel item (Paket)"
+  MessageAcknowledge:
+    type: object
+    properties:
+      timestamp:
+        type: string
+        description: 'The date+timestamp which identifies the point in time, where the information was generated, including milliseconds.'
+        format: date-time
+      sortingUnitKey:
+        type: string
+        description: 'Unique identifier of the sorting unit at a specific location.'
+        maxLength: 200
+      occurrenceId:
+        type: string
+        description: 'The unique identifier of the message occurrence to acknowledge.'
+        maxLength: 200
+      initiator:
+        type: string
+        description: 'The string identifying the source of the message.'
+    required:
+      - timestamp
+      - sortingUnitKey
+      - occurrenceId
+      - initiator
+    additionalProperties: false
+    description: 'Message acknowledge request'
   MessagePriority:
     type: string
     enum:
@@ -571,6 +620,10 @@ definitions:
   Message:
     type: object
     properties:
+      occurrenceId:
+        type: string
+        description: "A unique identifier of the message occurrence.\nThis identifier is used to uniquely identify the specific occurrence and it enables the usage of the message:acknowledge API."
+        maxLength: 200
       id:
         type: integer
         description: "An id, identifying the message. With the help of this Id and the language of the end user, the message text is localized.\nThe id must be unique within the context of the machine (Systemname plus SystemInstance) that generated the message."
