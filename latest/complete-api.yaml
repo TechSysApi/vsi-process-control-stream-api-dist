@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 7.7.0
+  version: 7.7.1-sallinmarc-1729011670780.1
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -1102,8 +1102,8 @@ definitions:
         maxLength: 32
       sourceId:
         type: string
-        description: 'Refers to a module id as event-source, e.g. DWS02'
-        pattern: '[A-Z]{3}[0-9]{2}'
+        description: "Refers to a module id as event-source, e.g. DWS02\nUsually 5 chars. The limit of 50 is arbitrary and might be increased if necessary."
+        maxLength: 50
       blockId:
         $ref: 'UUID'
         description: 'Identifier to track a group of parcels.'
