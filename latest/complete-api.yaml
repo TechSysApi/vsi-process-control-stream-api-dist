@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 7.7.2-feature-apikana-update.3
+  version: 7.7.2-feature-apikana-update.4
 host: 'server:1883'
 basePath: mqtt
 parameters:
