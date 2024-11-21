@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 7.8.0-feature-message-translation.1
+  version: 7.8.0-feature-message-translation.2
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -66,6 +66,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'ClientStatus'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/device/state/{srcSystem}/{srcInstance}':
     post:
       summary: '🔂[RETAINED OPTIONAL] ATG-6 update machine state'
@@ -78,6 +81,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'OverallState'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/control/state:set/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-6 Change machine state'
@@ -90,6 +96,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'OverallState'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/device/state:set:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-6 Change machine state'
@@ -102,6 +111,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/device/parameter-metadata/{srcSystem}/{srcInstance}':
     post:
       summary: '🔂[RETAINED] ATG-7 update parameter list'
@@ -114,6 +126,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'ParameterMetadata'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/device/parameter-values/{srcSystem}/{srcInstance}':
     post:
       summary: '🔂[RETAINED OPTIONAL] ATG-7 update parameter values'
@@ -126,6 +141,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'ParameterValues'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/control/parameter-values:set/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-7 change parameter values'
@@ -138,6 +156,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'ParameterValues'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/device/parameter-values:set:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-7 change parameter values status'
@@ -150,6 +171,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/device/messages/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-8 update messages'
@@ -162,6 +186,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'Messages'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/control/message:acknowledge/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-8 akcnowledge message'
@@ -174,6 +201,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'MessageAcknowledge'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/device/message:acknowledge:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-8 akcnowledge messages status'
@@ -186,6 +216,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/device/fill-levels/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-9 update live data'
@@ -198,6 +231,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'FillLevels'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/device/read-rates/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-9 update live data'
@@ -210,6 +246,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'ReadRates'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/device/track-event/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-10 update track event'
@@ -222,6 +261,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'TrackEvent'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/device/statistics/{srcSystem}/{srcInstance}':
     post:
       summary: 'ATG-11 update statistics'
@@ -234,6 +276,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'Statistics'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/control/software:restart/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-13 Device-Software neustarten'
@@ -246,6 +291,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'SoftwareRestartRequest'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/device/software:restart:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-13 Device-Software neustarten'
@@ -258,6 +306,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/control/hardware:reboot/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-14 Device-Hardware neustarten (boot)'
@@ -270,6 +321,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'HardwareRebootRequest'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/device/hardware:reboot:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-14 Device-Hardware neustarten (boot)'
@@ -282,6 +336,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/control/synchronize/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-15 Device Synchronisieren'
@@ -294,6 +351,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'SynchronizeRequest'}
+    x-data:
+      classification: P0
+      confidentiality: C2
   '{sortingUnitKey}/vsi-process-control/v7/device/synchronize:status/{srcSystem}/{srcInstance}/{dstSystem}/{dstInstance}/{conversationId}':
     post:
       summary: 'ATG-15 Device Synchronisieren'
@@ -306,6 +366,9 @@ paths:
       responses:
         default:
           schema: {$ref: 'RequestStatus'}
+    x-data:
+      classification: P0
+      confidentiality: C2
 definitions:
   BinOccupancyState:
     type: object
