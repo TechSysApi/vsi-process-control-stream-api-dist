@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 7.7.2
+  version: 7.8.0
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -680,6 +680,26 @@ definitions:
       - APPEAR
       - DISAPPEAR
     description: "Defines the alarm states.\nList of values:\n- NONE: used for events which occur at a specific timestamp\n- APPEAR / DISAPPEAR: used for events which can appear for a certain time slice."
+  MessageTranslationLanguage:
+    type: string
+    enum:
+      - GERMAN
+      - FRENCH
+      - ITALIAN
+  MessageTranslation:
+    type: object
+    properties:
+      language:
+        $ref: 'MessageTranslationLanguage'
+        description: 'The translation language.'
+      text:
+        type: string
+        description: 'The translated message text.'
+    required:
+      - language
+      - text
+    additionalProperties: false
+    description: 'The message translation in German, French or Italian.'
   Message:
     type: object
     properties:
@@ -704,7 +724,12 @@ definitions:
         description: 'If the message needs to be acknowledged by an operator.'
       text:
         type: string
-        description: "English description text as default fault/warning message with possibilities to insert parameters inJava Text-like format\nwith %N or $N syntax for identification of the N-th parameter.\nNormally the language specific text from the EMPS database will be used instead of this default text."
+        description: "English description text as default fault/warning message with possibilities to insert parameters inJava Text-like format\nwith %N or $N syntax for identification of the N-th parameter."
+      translations:
+        type: array
+        items:
+          $ref: 'MessageTranslation'
+        description: 'Optional message translation. All translations should declare the same parameters as the default English message.'
       parameters:
         type: array
         items:
