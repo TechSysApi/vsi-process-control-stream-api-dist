@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 7.8.0
+  version: 8.0.0-feature-makeSourceIdOptional.1
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -1037,10 +1037,10 @@ definitions:
     enum:
       - AUTOMATIC
       - MANUAL_CODING_REJECT
-      - MANUAL_CODING_LIGHT
-      - MANUAL_CODING_BULK
-      - MANUAL_CODING_BULK_AUTOMATIC
-    description: "Defines the sorting process.\nAUTOMATIC Sorted by the sorter\nMANUAL_CODING_REJECT Device where a coder manually captures barcodes and enters address information\nMANUAL_CODING_LIGHT Device where barcodes barcodes, products and the weight is captured (manual or partially automated)\nMANUAL_CODING_BULK Device where barcodes, weight and dimensions and address information for bulky goods are captured or entered (manual or partially automated)\nMANUAL_CODING_BULK_AUTOMATIC Device where a coder manually captures barcodes and other specific information for bulky goods"
+      - MANUAL_SORTING
+      - MANUAL_SORTING_BULK
+      - MANUAL_SORTING_BULK_ASSISTED
+    description: "Defines the sorting process.\nAUTOMATIC Sorted by the sorter\nMANUAL_CODING_REJECT Device where a coder manually captures barcodes and enters address information\nMANUAL_SORTING Mailpiece is sorted based on preknowledge. No adresse is captured and no services can be coded. If a mailpeice cannot be sorted without an address or service coding it will be handed over to a MANUAL_CODING_REJECT station.\nMANUAL_SORTING_BULK Manual sorting of bulky goods.\nMANUAL_SORTING_BULK_ASSISTED Manual sorting of bulky goods, assisted with a automated capturing device for the image, weight and dimensions"
   StatisticsType:
     type: string
     enum:
@@ -1190,7 +1190,7 @@ definitions:
         maxLength: 32
       sourceId:
         type: string
-        description: "Refers to a module id as event-source, e.g. DWS02\nUsually 5 chars. The limit of 50 is arbitrary and might be increased if necessary."
+        description: "[DEPRECATED] please use the processPoint\nRefers to a module id as event-source, e.g. DWS02\nUsually 5 chars. The limit of 50 is arbitrary and might be increased if necessary."
         maxLength: 50
       blockId:
         $ref: 'UUID'
@@ -1208,7 +1208,6 @@ definitions:
       - processPoint
       - sortingProcess
       - processingItemId
-      - sourceId
     additionalProperties: false
     description: 'The track event of an parcel. The event will be used for statistic purpose.'
   WeightMeasurementState:
