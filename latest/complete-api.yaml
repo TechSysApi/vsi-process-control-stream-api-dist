@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 8.0.0-feature-makeSourceIdOptional.1
+  version: 8.0.0-feature-makeSourceIdOptional.2
 host: 'server:1883'
 basePath: mqtt
 parameters:
