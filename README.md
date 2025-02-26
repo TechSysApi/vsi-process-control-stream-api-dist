@@ -8,3 +8,4 @@
 - [v7.7.2](https://TechSysApi.github.io/vsi-process-control-stream-api-dist/v7.7.2/ui/?url=../complete-api.yaml)
 - [v7.8.0](https://TechSysApi.github.io/vsi-process-control-stream-api-dist/v7.8.0/ui/?url=../complete-api.yaml)
 - [v8.0.0](https://TechSysApi.github.io/vsi-process-control-stream-api-dist/v8.0.0/ui/?url=../complete-api.yaml)
+- [v8.1.0](https://TechSysApi.github.io/vsi-process-control-stream-api-dist/v8.1.0/ui/?url=../complete-api.yaml)

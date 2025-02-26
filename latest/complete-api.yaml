@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 8.0.0
+  version: 8.1.0
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -1201,6 +1201,9 @@ definitions:
       mailpieceAttributes:
         $ref: 'MailpieceAttributes'
         description: "Provides basic mailpiece related information:\n\n- the kind of the mail item\n- a preknowledge result if a barcode reader or some other type of Enrichment Device is directly attached to the MC.\n   This result will be in accordance with the result type specified in the IC-ED interface."
+      trayId:
+        type: string
+        description: 'Identifier of the tray the mailpiece is transported on.'
     required:
       - timestamp
       - sortingUnitKey
