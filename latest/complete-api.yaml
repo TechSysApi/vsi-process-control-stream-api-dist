@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 8.2.0-feature-add-recirculation-information.4
+  version: 8.2.0-feature-add-recirculation-information.5
 host: 'server:1883'
 basePath: mqtt
 parameters:
