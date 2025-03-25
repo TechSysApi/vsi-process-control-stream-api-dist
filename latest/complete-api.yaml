@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 8.1.0
+  version: 8.2.0
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -954,6 +954,39 @@ definitions:
       - sortingUnitKey
     additionalProperties: false
     description: 'Contains an array of read rates.'
+  RecirculationReason:
+    type: string
+    enum:
+      - UNKNOWN
+      - SCANNER_TIMEOUT
+      - ITEM_INDUCTION_ERROR
+      - ITEM_DISCHARGE_ERROR
+      - ITEM_ERROR
+      - ITEM_TRACKING_ERROR
+      - ITEM_STRAY
+      - ITEM_OCCUPIED_TWICE_ERROR
+      - ITEM_NO_OUTLETGROUP
+      - OUTLET_NOT_AVAILABLE
+      - OUTLET_UNKNOWN
+      - OUTLET_NO_CAPACITY
+      - OUTLET_MISSED
+      - UNDEFINED_ERROR
+      - OUTLETGROUP_UNKNOWN
+    description: "The reason why the mailpiece is recirculates.\nList of values:\n- UNKNOWN: The reason for the recirculation is unknown.\n- SCANNER_TIMEOUT: Item has reached the max allowed amount of scans and the last attempt was a \"no answer\" from scanner.\n- ITEM_INDUCTION_ERROR: Induction error item detected (occupied twice, wrong tray).\n- ITEM_DISCHARGE_ERROR: Discharge faults.\n- ITEM_ERROR: Item has a Logical error.\n- ITEM_TRACKING_ERROR: item was inducted with tracking fault.\n- ITEM_STRAY: Stray item detected.\n- ITEM_OCCUPIED_TWICE_ERROR: item was inducted on occupied tray.\n- ITEM_NO_OUTLETGROUP: No sorting information / outlet group has been received for this item.\n- OUTLET_NOT_AVAILABLE: No available chute could be found.\n- OUTLET_UNKNOWN: Logical destination not defined.\n- OUTLET_NO_CAPACITY: The destination outlet has no more capacity.\n- OUTLET_MISSED: Sortcode has been updated (push or repetitive requests), physical outlet already passed.\n- UNDEFINED_ERROR: Internal error happened.\n- OUTLETGROUP_UNKNOWN: The outlet group is unknown."
+  Recirculation:
+    type: object
+    properties:
+      numberOfRecirculations:
+        type: integer
+        description: 'The number of recirculations so far in this sorting cycle.'
+      reason:
+        $ref: 'RecirculationReason'
+        description: 'The reason for the recirculation.'
+    required:
+      - numberOfRecirculations
+      - reason
+    additionalProperties: false
+    description: 'Recirculation information for a mailpiece, if it is being recirculated.'
   RecognitionResult:
     type: object
     properties:
@@ -1204,6 +1237,9 @@ definitions:
       trayId:
         type: string
         description: 'Identifier of the tray the mailpiece is transported on.'
+      recirculation:
+        $ref: 'Recirculation'
+        description: 'If the mailpiece is recirculating, this object contains the recirculation information.'
     required:
       - timestamp
       - sortingUnitKey
