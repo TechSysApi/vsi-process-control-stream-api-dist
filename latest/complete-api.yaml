@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 8.2.0
+  version: 8.3.0
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -1086,7 +1086,9 @@ definitions:
       - DESTINATION_STAT
       - SPECIAL_DESTINATION
       - ACS_STAT
-    description: "StatisticsType defines the contents in the statistics values.\nList of values:\n- UNKNOWN: Default enum value to map not supported values.\n- INDUCTION: induction statistics (Einschleusung-Statistik)\n- CHUTE: physical sort destination statistics (Endstellen-Statistik).\n- SCANNER: scanner statistics (DWS-Statistik).\n- SORTER: Up- and Downtime statistics (Sorter Verfügbarkeit-Statistik).\n- TRAY_STAT: tray load statistics (Schalenauslastung-Statistik).\n- DESTINATION_STAT: logical sort destination statistics (Zielstatistik).\n- SPECIAL_DESTINATION: special sort statistics (Sonderziel- / Fehlerart-Statistik).\n- ACS_STAT: Automatic Coding System statistics (Codiersystem-Statistik)"
+      - SUPPLY_LINE
+      - CODING_LINE
+    description: "StatisticsType defines the contents in the statistics values.\nList of values:\n- UNKNOWN: Default enum value to map not supported values.\n- INDUCTION: induction statistics (Einschleusung-Statistik)\n- CHUTE: physical sort destination statistics (Endstellen-Statistik).\n- SCANNER: scanner statistics (DWS-Statistik).\n- SORTER: Up- and Downtime statistics (Sorter Verfügbarkeit-Statistik).\n- TRAY_STAT: tray load statistics (Schalenauslastung-Statistik).\n- DESTINATION_STAT: logical sort destination statistics (Zielstatistik).\n- SPECIAL_DESTINATION: special sort statistics (Sonderziel- / Fehlerart-Statistik).\n- ACS_STAT: Automatic Coding System statistics (Codiersystem-Statistik)\n- SUPPLY_LINE: supply line statistics\n- CODING_LINE: coding line statistics"
   Statistics:
     type: object
     properties:
