@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 8.1.0-feature-live.2
+  version: 8.5.0-feature-live.3
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -677,6 +677,8 @@ definitions:
         items:
           type: string
         description: 'The names of the values in this stats object'
+      type:
+        $ref: 'StatisticsType'
       values:
         type: array
         items:
@@ -686,6 +688,7 @@ definitions:
       - timeSliceStart
       - timeSlice
       - processPoint
+      - type
       - values
     additionalProperties: false
     description: 'The statistic event of an element. The statistic will be used for visualization and control purposes.'
@@ -1108,10 +1111,10 @@ definitions:
     enum:
       - AUTOMATIC
       - MANUAL_CODING_REJECT
-      - MANUAL_CODING_LIGHT
-      - MANUAL_CODING_BULK
-      - MANUAL_CODING_BULK_AUTOMATIC
-    description: "Defines the sorting process.\nAUTOMATIC Sorted by the sorter\nMANUAL_CODING_REJECT Device where a coder manually captures barcodes and enters address information\nMANUAL_CODING_LIGHT Device where barcodes barcodes, products and the weight is captured (manual or partially automated)\nMANUAL_CODING_BULK Device where barcodes, weight and dimensions and address information for bulky goods are captured or entered (manual or partially automated)\nMANUAL_CODING_BULK_AUTOMATIC Device where a coder manually captures barcodes and other specific information for bulky goods"
+      - MANUAL_SORTING
+      - MANUAL_SORTING_BULK
+      - MANUAL_SORTING_BULK_ASSISTED
+    description: "Defines the sorting process.\nAUTOMATIC Sorted by the sorter\nMANUAL_CODING_REJECT Device where a coder manually captures barcodes and enters address information\nMANUAL_SORTING Mailpiece is sorted based on preknowledge. No adresse is captured and no services can be coded. If a mailpeice cannot be sorted without an address or service coding it will be handed over to a MANUAL_CODING_REJECT station.\nMANUAL_SORTING_BULK Manual sorting of bulky goods.\nMANUAL_SORTING_BULK_ASSISTED Manual sorting of bulky goods, assisted with a automated capturing device for the image, weight and dimensions"
   StatisticsType:
     type: string
     enum:
@@ -1124,7 +1127,9 @@ definitions:
       - DESTINATION_STAT
       - SPECIAL_DESTINATION
       - ACS_STAT
-    description: "StatisticsType defines the contents in the statistics values.\nList of values:\n- UNKNOWN: Default enum value to map not supported values.\n- INDUCTION: induction statistics (Einschleusung-Statistik)\n- CHUTE: physical sort destination statistics (Endstellen-Statistik).\n- SCANNER: scanner statistics (DWS-Statistik).\n- SORTER: Up- and Downtime statistics (Sorter Verfügbarkeit-Statistik).\n- TRAY_STAT: tray load statistics (Schalenauslastung-Statistik).\n- DESTINATION_STAT: logical sort destination statistics (Zielstatistik).\n- SPECIAL_DESTINATION: special sort statistics (Sonderziel- / Fehlerart-Statistik).\n- ACS_STAT: Automatic Coding System statistics (Codiersystem-Statistik)"
+      - SUPPLY_LINE
+      - CODING_LINE
+    description: "StatisticsType defines the contents in the statistics values.\nList of values:\n- UNKNOWN: Default enum value to map not supported values.\n- INDUCTION: induction statistics (Einschleusung-Statistik)\n- CHUTE: physical sort destination statistics (Endstellen-Statistik).\n- SCANNER: scanner statistics (DWS-Statistik).\n- SORTER: Up- and Downtime statistics (Sorter Verfügbarkeit-Statistik).\n- TRAY_STAT: tray load statistics (Schalenauslastung-Statistik).\n- DESTINATION_STAT: logical sort destination statistics (Zielstatistik).\n- SPECIAL_DESTINATION: special sort statistics (Sonderziel- / Fehlerart-Statistik).\n- ACS_STAT: Automatic Coding System statistics (Codiersystem-Statistik)\n- SUPPLY_LINE: supply line statistics\n- CODING_LINE: coding line statistics"
   Statistics:
     type: object
     properties:
@@ -1261,7 +1266,7 @@ definitions:
         maxLength: 32
       sourceId:
         type: string
-        description: "Refers to a module id as event-source, e.g. DWS02\nUsually 5 chars. The limit of 50 is arbitrary and might be increased if necessary."
+        description: "[DEPRECATED] please use the processPoint\nRefers to a module id as event-source, e.g. DWS02\nUsually 5 chars. The limit of 50 is arbitrary and might be increased if necessary."
         maxLength: 50
       blockId:
         $ref: 'UUID'
@@ -1272,6 +1277,9 @@ definitions:
       mailpieceAttributes:
         $ref: 'MailpieceAttributes'
         description: "Provides basic mailpiece related information:\n\n- the kind of the mail item\n- a preknowledge result if a barcode reader or some other type of Enrichment Device is directly attached to the MC.\n   This result will be in accordance with the result type specified in the IC-ED interface."
+      trayId:
+        type: string
+        description: 'Identifier of the tray the mailpiece is transported on.'
     required:
       - timestamp
       - sortingUnitKey
@@ -1279,7 +1287,6 @@ definitions:
       - processPoint
       - sortingProcess
       - processingItemId
-      - sourceId
     additionalProperties: false
     description: 'The track event of an parcel. The event will be used for statistic purpose.'
   WeightMeasurementState:
