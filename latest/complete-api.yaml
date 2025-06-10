@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 8.5.0
+  version: 8.6.0-mateom-1749547491182.1
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -555,7 +555,8 @@ definitions:
       - SICK
       - FLUECK
       - PRIMEVISION
-    description: "List of implementors of this API.\nList of values:\n- BEUMER: cross belt sorter\n- LIPPERT: ROTA sorter\n- FIVES: GENI-Ant sorter\n- KOERBER: mix mail parcel integration\n- SICK: 3D scanner for bulk\n- FLUECK: roll cage conveyor\n- PRIMEVISION: presorting module"
+      - SCHMID_PARTNER
+    description: "List of implementors of this API.\nList of values:\n- BEUMER: cross belt sorter\n- LIPPERT: ROTA sorter\n- FIVES: GENI-Ant sorter\n- KOERBER: mix mail parcel integration\n- SICK: 3D scanner for bulk\n- FLUECK: roll cage conveyor\n- PRIMEVISION: presorting module\n- SCHMID_PARTNER: TODO"
   InformationCarrier:
     type: object
     properties:
