@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 8.6.0
+  version: 8.7.0-feature-add-new-sort-reason.1
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -1106,7 +1106,8 @@ definitions:
       - DIMENSION_ERROR
       - WEIGHT_ERROR
       - DIRECT_SORTING_MODE
-    description: "Defines the machine specific sort reasons.\nList of values:\n- OK: Discharge OK. This describes just a \"regular\" item.\n- FALLBACK_OUTLET: Item has reached the max allowed amount of recirculations or end of line on a linear sorter.\n- ITEM_DISAPPEARED: The parcel was lost at unknown location.\n- DIMENSION_ERROR: Item oversize. The parcel was discharge, because of dimension exceed.\n- WEIGHT_ERROR: Item too heavy. The parcel was discharge, because of weight exceed.\n- DIRECT_SORTING_MODE: Item sorted by the direct sorting mode."
+      - ITEM_NO_OUTLETGROUP
+    description: "Defines the machine specific sort reasons.\nList of values:\n- OK: Discharge OK. This describes just a \"regular\" item.\n- FALLBACK_OUTLET: Item has reached the max allowed amount of recirculations or end of line on a linear sorter.\n- ITEM_DISAPPEARED: The parcel was lost at unknown location.\n- DIMENSION_ERROR: Item oversize. The parcel was discharge, because of dimension exceed.\n- WEIGHT_ERROR: Item too heavy. The parcel was discharge, because of weight exceed.\n- DIRECT_SORTING_MODE: Item sorted by the direct sorting mode.\n- ITEM_NO_OUTLETGROUP: No sorting information / outlet group has been received for this item."
   SortingProcess:
     type: string
     enum:
