@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 8.6.0
+  version: 8.7.0-feature-PZS-11227-add-vz-to-trackevents.1
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -1281,6 +1281,9 @@ definitions:
       trayId:
         type: string
         description: 'Identifier of the tray the mailpiece is transported on.'
+      virtualDestinationName:
+        type: string
+        description: "The name of the virtual destination the mailpiece is sorted to.\nOnly used for the track event type TRACK and by PP2000 parcel sorter."
     required:
       - timestamp
       - sortingUnitKey
