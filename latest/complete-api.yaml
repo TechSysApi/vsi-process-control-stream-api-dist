@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 8.7.0
+  version: 9.0.0
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -1334,7 +1334,6 @@ definitions:
       value:
         type: integer
         description: 'Actual weight in [g].'
-        minimum: 0
         maximum: 999999
       scaleId:
         type: string
