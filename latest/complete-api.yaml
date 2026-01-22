@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 9.0.0
+  version: 9.1.0
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -873,8 +873,7 @@ definitions:
         type: array
         items:
           $ref: 'ModuleState'
-        description: "The set of attributes transmitting substates of a device. Each element stands for a specific visualisation element / state variable.\nThere exists as many instances of this attribute in the group as necessary to express all state information of the device role."
-        minItems: 1
+        description: "The set of attributes transmitting substates of a device. Each element stands for a specific visualisation element / state variable.\nThere exists as many instances of this attribute in the group as necessary to express all state information of the device role.\n\nIf this field is set, it should contain at least one entry. This is not enforced on API contract level at the moment, but this\nwill be the case in future versions of the API."
     required:
       - timestamp
       - sortingUnitKey
