@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 9.1.0-refactor-do-not-enforce-module-states.2
+  version: 9.1.0-refactor-do-not-enforce-module-states.3
 host: 'server:1883'
 basePath: mqtt
 parameters:
