@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Swiss Post Sorting System Development'
     email: sortdev@post.ch
-  version: 9.1.0
+  version: 9.2.0
 host: 'server:1883'
 basePath: mqtt
 parameters:
@@ -583,6 +583,9 @@ definitions:
       undersized:
         type: boolean
         description: 'object too small to be measured'
+      dimensionsExceedMachineLimits:
+        type: boolean
+        description: "Indicates whether the mailpiece dimensions exceed the physical processing limits of the sorter (from scanner to outlet).\n- `true`: The dimensions exceed machine limits and are considered invalid for processing.\n- `false`: The dimensions are within machine limits and plausible for processing.\n- `undefined`: It is unknown whether the dimensions exceed machine limits. This is expected when limits are not defined or measurements could not be performed."
     required:
       - ok
       - oversized
